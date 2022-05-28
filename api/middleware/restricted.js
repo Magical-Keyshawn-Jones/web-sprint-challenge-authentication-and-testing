@@ -14,16 +14,16 @@ const model = require('../auth/auth-model')
       the response body should include a string exactly as follows: "token invalid".
   */
 async function authenticated (req, res, next) {
-  // const { token } = req.session 
-  const { authorization } = req.header.authorization
+  const { token } = req.session 
+  // const { authorization } = req.header.authorization
 
-  // if (token === undefined) {
-  if (authorization === undefined) {
+  if (token === undefined) {
+  // if (authorization === undefined) {
     return res.status(400).json({ message: 'token required' })
   } 
 
-  // jwt.verify(token, secret.JWT_SECRET, (err, decodedToken) => {
-  jwt.verify(authorization, secret.JWT_SECRET, (err, decodedToken) => {
+  jwt.verify(token, secret.JWT_SECRET, (err, decodedToken) => {
+  // jwt.verify(authorization, secret.JWT_SECRET, (err, decodedToken) => {
     if (err) {
       return res.status(401).json({ message: 'token invalid' })
     } else {
