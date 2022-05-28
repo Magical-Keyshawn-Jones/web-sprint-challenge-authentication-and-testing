@@ -32,7 +32,7 @@ const middleware = require('../middleware/restricted')
   4- On FAILED registration due to the `username` being taken,
     the response body should include a string exactly as follows: "username taken".
 */
-router.post('/register', middleware.bodyChecker, (req, res) => {
+router.post('/register', middleware.registerRequirements, (req, res) => {
   const user = req.body
 
   const hash = bcrypt.hashSync(user.password, 8)
@@ -40,7 +40,7 @@ router.post('/register', middleware.bodyChecker, (req, res) => {
 
   model.add(user)
   .then(results => {
-    res.status(201).json(results)
+    res.status(201).json(results.id)
   })
   .catch(err => {
     console.log(err)
