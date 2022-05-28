@@ -14,8 +14,8 @@ const model = require('../auth/auth-model')
       the response body should include a string exactly as follows: "token invalid".
   */
 async function authenticated (req, res, next) {
-  const { token } = req.session 
-  const { authorization } = req.header
+  const { token } = req.session
+  const { authorization } = req.headers
   const dahBaby = authorization || token
   console.log(dahBaby)
 
