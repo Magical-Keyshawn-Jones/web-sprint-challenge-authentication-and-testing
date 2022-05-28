@@ -15,15 +15,16 @@ const model = require('../auth/auth-model')
   */
 async function authenticated (req, res, next) {
   const { token } = req.session 
-  // const { authorization } = req.header.authorization
-  console.log(token)
+  const { authorization } = req.header
+  const dahBaby = authorization || token
+  console.log(dahBaby)
 
-  if (token === undefined) {
+  if (dahBaby === undefined) {
   // if (authorization === undefined) {
     return res.status(400).json({ message: 'token required' })
   } 
 
-  jwt.verify(token, secret.JWT_SECRET, (err, decodedToken) => {
+  jwt.verify(dahBaby, secret.JWT_SECRET, (err, decodedToken) => {
   // jwt.verify(authorization, secret.JWT_SECRET, (err, decodedToken) => {
     if (err) {
       console.log(err)
