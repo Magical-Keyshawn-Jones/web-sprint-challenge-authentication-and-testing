@@ -3,6 +3,7 @@ const model = require('./auth-model')
 const bcrypt = require('bcrypt')
 const jwt  = require('jsonwebtoken')
 const secret = require('./secret')
+const middleware = require('../middleware/restricted')
 
 
 
@@ -31,7 +32,7 @@ const secret = require('./secret')
   4- On FAILED registration due to the `username` being taken,
     the response body should include a string exactly as follows: "username taken".
 */
-router.post('/register', (req, res) => {
+router.post('/register', middleware.bodyChecker, (req, res) => {
   const user = req.body
 
   const hash = bcrypt.hashSync(user.password, 8)
@@ -70,7 +71,7 @@ router.post('/register', (req, res) => {
   4- On FAILED login due to `username` not existing in the db, or `password` being incorrect,
     the response body should include a string exactly as follows: "invalid credentials".
 */
-router.post('/login', (req, res) => {
+router.post('/login', middleware.bodyChecker, (req, res) => {
   const { password } = req.body
   const { body } = req
 
