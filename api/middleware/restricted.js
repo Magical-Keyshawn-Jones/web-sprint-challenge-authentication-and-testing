@@ -14,33 +14,44 @@ const model = require('../auth/auth-model')
       the response body should include a string exactly as follows: "token invalid".
   */
 async function authenticated (req, res, next) {
-  try {
-    const { token } = req.session
-    // const token = req.headers.authorization
-    console.log(token)
+  const { token } = req.session 
 
-    req.decodeJwt = jwt.verify(token, secret.JWT_SECRET, (err, decodeToken) => {
-      if (err) {
-        console.log(err)
-        res.status(500).json({ message: 'Failed to Authenticate' })
-      } else {
-        model.findById(decodeToken.sub)
-        .then(results => {
-          console.log(results)
-          // return res.status(200).json(results)
-          return next()
-        })
-      }
-    })
+  if (token === undefined) {
+    return res.status(400).json({ message: 'token required' })
+  } 
 
-    // next()
-  } catch(err) {
-    console.log(err)
-  }
+  jwt.verify(token, secret.JWT_SECRET, (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: 'token invalid' })
+    } else {
+      return next()
+    }
+  })
 }
 
 function bodyChecker (req, res, next) {
+  const { username, password } = req.body
+  const { body } = req
+  if (username === undefined && password === undefined) {
+    return res.status(400).json({ message: 'username and password is required'})
+  } else if (username === undefined) {
+    return res.status(400).json({ message: 'username is required' })
+  } else if (password === undefined) {
+    return res.status(400).json({ message: 'password is required' })
+  } 
 
+  model.findBy(body)
+  .then(results => {
+    if (results) {
+      return res.status(400).json=({ message: 'username taken'})
+    } else {
+      return next()
+    }
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({ message: 'Internal error' })
+  })
 }
 
 module.exports = {

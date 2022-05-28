@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const model = require('./auth-model')
-const axios = require('axios')
 const bcrypt = require('bcrypt')
 const jwt  = require('jsonwebtoken')
 const secret = require('./secret')
