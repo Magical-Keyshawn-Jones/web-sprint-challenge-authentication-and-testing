@@ -40,7 +40,8 @@ router.post('/register', middleware.registerRequirements, (req, res) => {
 
   model.add(user)
   .then(results => {
-    res.status(201).json(results.id)
+    console.log(results[0])
+    res.status(201).json(results[0])
   })
   .catch(err => {
     console.log(err)
@@ -92,7 +93,7 @@ router.post('/login', middleware.bodyChecker, (req, res) => {
       // res.header('authorization', token)
       // console.log(req.session.token)
       // console.log(req.session)
-      return res.status(200).json({ message: `Welcome ${user.username}`, token: 'dsff'})
+      return res.status(200).json({ message: `Welcome ${user.username}`, token: token})
     } else {
       return res.status(401).json({ message: 'invalid credentials' })
     }
