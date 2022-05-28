@@ -91,7 +91,7 @@ router.post('/login', (req, res) => {
       res.header('authorization', token)
       console.log(req.session.token)
       console.log(req.session)
-      return res.status(200).json({ message: `Welcome Back ${user.username}`, token})
+      return res.status(200).json({ message: `Welcome ${user.username}`, token: token})
     } else {
       return res.status(401).json({ message: 'invalid credentials' })
     }
