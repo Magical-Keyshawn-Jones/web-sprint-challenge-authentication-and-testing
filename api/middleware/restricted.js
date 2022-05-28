@@ -16,6 +16,7 @@ const model = require('../auth/auth-model')
 async function authenticated (req, res, next) {
   const { token } = req.session 
   // const { authorization } = req.header.authorization
+  console.log(token)
 
   if (token === undefined) {
   // if (authorization === undefined) {
@@ -25,14 +26,16 @@ async function authenticated (req, res, next) {
   jwt.verify(token, secret.JWT_SECRET, (err, decodedToken) => {
   // jwt.verify(authorization, secret.JWT_SECRET, (err, decodedToken) => {
     if (err) {
+      console.log(err)
       return res.status(401).json({ message: 'token invalid' })
     } else {
+      console.log(decodedToken)
       return next()
     }
   })
 }
 
-function bodyChecker (req, res, next) {
+function registerRequirements (req, res, next) {
   const { username, password } = req.body
   const { body } = req
   if (username === undefined && password === undefined) {
@@ -45,10 +48,10 @@ function bodyChecker (req, res, next) {
 
   model.findBy(body)
   .then(results => {
-    if (results) {
-      return res.status(400).json({ message: 'username taken'})
-    } else {
+    if (results.length === 0) {
       return next()
+    } else {
+      return res.status(400).json({ message: 'username taken'})
     }
   })
   .catch(err => {
@@ -57,7 +60,21 @@ function bodyChecker (req, res, next) {
   })
 }
 
+function bodyChecker (req, res, next) {
+  const { username, password } = req.body
+  if (username === undefined && password === undefined) {
+    return res.status(400).json({ message: 'username and password is required'})
+  } else if (username === undefined) {
+    return res.status(400).json({ message: 'username is required' })
+  } else if (password === undefined) {
+    return res.status(400).json({ message: 'password is required' })
+  } else {
+    return next()
+  }
+}
+
 module.exports = {
   authenticated,
-  bodyChecker,  
+  bodyChecker, 
+  registerRequirements, 
 }

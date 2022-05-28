@@ -89,10 +89,10 @@ router.post('/login', middleware.bodyChecker, (req, res) => {
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = generateToken(user);
       req.session.token = token
-      res.header('authorization', token)
-      console.log(req.session.token)
-      console.log(req.session)
-      return res.status(200).json({ message: `Welcome ${user.username}`, token: token})
+      // res.header('authorization', token)
+      // console.log(req.session.token)
+      // console.log(req.session)
+      return res.status(200).json({ message: `Welcome ${user.username}`, token: 'dsff'})
     } else {
       return res.status(401).json({ message: 'invalid credentials' })
     }
