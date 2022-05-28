@@ -46,7 +46,7 @@ function bodyChecker (req, res, next) {
   model.findBy(body)
   .then(results => {
     if (results) {
-      return res.status(400).json=({ message: 'username taken'})
+      return res.status(400).json({ message: 'username taken'})
     } else {
       return next()
     }
