@@ -5,6 +5,8 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
     "test": "cross-env NODE_ENV=testing jest --verbose --runInBand --silent"
   },
@@ -30,6 +32,6 @@
     "eslint": "8.14.0",
     "jest": "28.1.0",
     "nodemon": "2.0.16",
-    "supertest": "6.2.3"
+    "supertest": "^6.2.3"
   }
 }
